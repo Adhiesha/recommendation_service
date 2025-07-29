@@ -1,0 +1,13 @@
+replicaCount: 1
+
+image:
+  repository: adeeshadev/recommendation-service
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 5002
+
+env:
+  GAME_SERVICE_URL: "http://game-service-backend:5001/games"
