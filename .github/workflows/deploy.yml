@@ -2,11 +2,16 @@ name: Build and Push Docker Image
 
 on:
   push:
-    branches: [ master, develop ]
+    branches: [ master, release, develop ]
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+
+    env:
+      IMAGE_NAME: adeeshadev/recommendation-service
+      IMAGE_TAG: ${{ github.ref_name == 'master' && 'latest' || github.ref_name == 'release' && 'stage_latest' || 'dev_latest' }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -20,7 +25,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push (multi-platform)
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
