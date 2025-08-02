@@ -16,7 +16,7 @@ spec:
           args:
             - |
               pip install requests && \
-              python3 /tests/order_test.py "{{ .Values.test.apiBaseUrl }}"
+              python3 /tests/recommendation_test.py "{{ .Values.test.apiBaseUrl }}"
           volumeMounts:
             - name: test-scripts
               mountPath: /tests
