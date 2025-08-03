@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: post-sync-recommendation-test
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: recommendation-api-test
+          image: python:3.10
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              pip install requests && \
+              python3 /tests/recommendation_test.py "{{ .Values.test.apiBaseUrl }}"
+          volumeMounts:
+            - name: test-scripts
+              mountPath: /tests
+      volumes:
+        - name: test-scripts
+          configMap:
+            name: recommendation-test-script
